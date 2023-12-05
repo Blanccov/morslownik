@@ -91,7 +91,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/prevText"
         android:layout_width="353dp"
         android:layout_height="170dp"
         android:layout_marginTop="20dp"
@@ -111,8 +111,28 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:src="@drawable/transalte_button"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText2"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        app:layout_constraintEnd_toEndOf="@+id/prevText"
+        app:layout_constraintStart_toStartOf="@+id/prevText"
+        app:layout_constraintTop_toBottomOf="@+id/prevText" />
+
+    <ImageView
+        android:id="@+id/button_copy"
+        android:layout_width="27dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/duplicate"
+        app:layout_constraintEnd_toEndOf="@+id/prevText"
+        app:layout_constraintTop_toTopOf="@+id/prevText" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="27dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/duplicate"
+        app:layout_constraintEnd_toEndOf="@+id/editTextText3"
+        app:layout_constraintTop_toTopOf="@+id/editTextText3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
