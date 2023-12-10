@@ -40,13 +40,13 @@
         app:layout_constraintStart_toEndOf="@+id/button6" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/afterText"
         android:layout_width="353dp"
         android:layout_height="170dp"
         android:layout_marginTop="8dp"
         android:background="#CFC6BF"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:padding="10dp"
         android:text="aha"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +97,7 @@
         android:layout_marginTop="20dp"
         android:background="#CFC6BF"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textMultiLine"
         android:padding="10dp"
         android:text="aha"
         app:layout_constraintEnd_toEndOf="parent"
@@ -132,7 +132,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:src="@drawable/duplicate"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText3"
-        app:layout_constraintTop_toTopOf="@+id/editTextText3" />
+        app:layout_constraintEnd_toEndOf="@+id/afterText"
+        app:layout_constraintTop_toTopOf="@+id/afterText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

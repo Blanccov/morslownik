@@ -22,6 +22,7 @@ class CaptureActivity : ComponentActivity() {
     private lateinit var getImage: ImageButton
     private lateinit var next: ImageButton
     private lateinit var recgText: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.capturelayout)
@@ -39,6 +40,11 @@ class CaptureActivity : ComponentActivity() {
                 .compress(1024)			//Final image size will be less than 1 MB(Optional)
                 .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                 .start()
+        }
+
+        next.setOnClickListener {
+            val intentT = Intent(applicationContext, TranslatorActivity::class.java)
+            startActivity(intentT)
         }
     }
 
@@ -66,6 +72,7 @@ class CaptureActivity : ComponentActivity() {
                     .addOnSuccessListener { visionText ->
                         val resultText = visionText.text
                         recgText.text = resultText
+                        textToTranslate = resultText
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
@@ -74,5 +81,9 @@ class CaptureActivity : ComponentActivity() {
                 e.printStackTrace()
             }
         }
+    }
+
+    companion object {
+        var textToTranslate: String = ""
     }
 }
