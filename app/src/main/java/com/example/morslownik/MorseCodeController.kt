@@ -1,10 +1,10 @@
 package com.example.morslownik;
 
-//import javax.sound.sampled.AudioFormat
-//import javax.sound.sampled.AudioSystem
-//import javax.sound.sampled.DataLine
-//import javax.sound.sampled.SourceDataLine
-//import javax.sound.sampled.LineUnavailableException
+import android.media.AudioFormat
+import android.media.AudioManager
+import android.media.AudioTrack
+
+
 
 class MorseCodeController {
     private val morseCodeMap: HashMap<Char, String> = HashMap()
@@ -112,50 +112,62 @@ class MorseCodeController {
         return translatedText.toString()
     }
 
-//    @Throws(LineUnavailableException::class, InterruptedException::class)
-//    fun playSound(morseMessage: Array<String>) {
-//        val audioFormat = AudioFormat(44100f, 16, 1, true, false)
-//        val dataLineInfo = DataLine.Info(SourceDataLine::class.java, audioFormat)
-//        val sourceDataLine = AudioSystem.getLine(dataLineInfo) as SourceDataLine
-//        sourceDataLine.open(audioFormat)
-//        sourceDataLine.start()
-//
-//        val dotDuration = 200
-//        val dashDuration = (1.5 * dotDuration).toInt()
-//        val slashDuration = 2 * dashDuration
-//
-//        for (pattern in morseMessage) {
-//            println(pattern)
-//
-//            for (c in pattern.toCharArray()) {
-//                when (c) {
-//                    '.' -> {
-//                        playBeep(sourceDataLine, dotDuration)
-//                        Thread.sleep(dotDuration.toLong())
-//                    }
-//                    '-' -> {
-//                        playBeep(sourceDataLine, dashDuration)
-//                        Thread.sleep(dotDuration.toLong())
-//                    }
-//                    '/' -> Thread.sleep(slashDuration.toLong())
-//                }
-//            }
-//            Thread.sleep(dotDuration.toLong())
-//        }
-//
-//        sourceDataLine.drain()
-//        sourceDataLine.stop()
-//        sourceDataLine.close()
-//    }
-//
-//    private fun playBeep(line: SourceDataLine, duration: Int) {
-//        val data = ByteArray(duration * 44100 / 1000)
-//
-//        for (i in data.indices) {
-//            val angle = i / (44100.0 / 440) * 2.0 * Math.PI
-//            data[i] = (Math.sin(angle) * 127.0).toByte()
-//        }
-//
-//        line.write(data, 0, data.size)
-//    }
+
+
+    @Throws(InterruptedException::class)
+    fun playSound(morseMessage: Array<String>) {
+        val sampleRate = 44100
+        val minBufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
+
+        val audioTrack = AudioTrack(
+            AudioManager.STREAM_MUSIC,
+            sampleRate,
+            AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            minBufferSize,
+            AudioTrack.MODE_STREAM
+        )
+
+        audioTrack.play()
+
+        val dotDuration = 200
+        val dashDuration = (2 * dotDuration).toInt()
+        val slashDuration = 4 * dashDuration
+
+        for (pattern in morseMessage) {
+            for (c in pattern.toCharArray()) {
+                when (c) {
+                    '.' -> {
+                        playBeep(audioTrack, dotDuration)
+                        Thread.sleep(dotDuration.toLong())
+                    }
+                    '-' -> {
+                        playBeep(audioTrack, dashDuration)
+                        Thread.sleep(dotDuration.toLong())
+                    }
+                    '/' -> Thread.sleep(slashDuration.toLong())
+                }
+            }
+            Thread.sleep(dotDuration.toLong())
+        }
+
+        audioTrack.stop()
+        audioTrack.release()
+    }
+
+    private fun playBeep(audioTrack: AudioTrack, duration: Int) {
+        val numSamples = duration * 44100 / 1000
+        val buffer = ShortArray(numSamples)
+        val amp = 10000
+        val twoPi = 2.0 * Math.PI
+
+        val freq = 440.0
+
+        for (i in 0 until numSamples) {
+            buffer[i] = (amp * Math.sin(i.toDouble() * twoPi * freq / 44100.0)).toInt().toShort()
+        }
+
+        audioTrack.write(buffer, 0, buffer.size)
+    }
+
 }
