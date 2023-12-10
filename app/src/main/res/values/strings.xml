@@ -7,4 +7,5 @@
     <string name="camera_btn">Camera</string>
     <string name="title_activity_translator">TranslatorActivity</string>
     <string name="title_activity_capture">CaptureActivity</string>
+    <string name="translate_btn">Translate</string>
 </resources>

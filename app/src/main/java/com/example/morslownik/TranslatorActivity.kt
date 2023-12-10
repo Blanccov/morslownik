@@ -1,6 +1,8 @@
 package com.example.morslownik
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 
@@ -11,15 +13,19 @@ class TranslatorActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.translatorlayout)
 
-        findViewById<TextView>(R.id.prevText).text = CaptureActivity.textToTranslate
+        var captureText = CaptureActivity.textToTranslate
 
-        val textToTranslate = findViewById<TextView>(R.id.prevText).text.toString()
-//         textToTranslate = CaptureActivity.textToTranslate // Assuming you have the text to translate stored in CaptureActivity
+        if (captureText != "") {
+            findViewById<EditText>(R.id.prevText).setText(captureText)
+        }
 
-        // Translate text to Morse code
-        val morseCode = morseCodeController.translateToMorse(textToTranslate)
+        val previousText = findViewById<EditText>(R.id.prevText) // Zmiana na EditText, aby użytkownik mógł wprowadzać tekst
+        val afterText = findViewById<TextView>(R.id.afterText)
 
-
-        findViewById<TextView>(R.id.afterText).text = morseCode
+        findViewById<Button>(R.id.translateButton).setOnClickListener{
+            val textToTranslate = previousText.text.toString() // Pobranie wprowadzonego tekstu
+            val morseCode = morseCodeController.translateToMorse(textToTranslate)
+            afterText.text = morseCode
+        }
     }
 }
