@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/button6"
+        android:id="@+id/torchButton"
         android:layout_width="90dp"
         android:layout_height="80dp"
         android:layout_marginStart="32dp"
@@ -37,7 +37,7 @@
         android:backgroundTint="#384146"
         android:src="@drawable/volume"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button6" />
+        app:layout_constraintStart_toEndOf="@+id/torchButton" />
 
     <ImageButton
         android:id="@+id/paybackButton"

@@ -1,5 +1,6 @@
 package com.example.morslownik
 
+import FlashController
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
@@ -12,6 +13,7 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.Manifest
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.media.MediaRecorder
 import android.os.Environment
@@ -24,6 +26,8 @@ import java.io.IOException
 
 class TranslatorActivity : ComponentActivity() {
     private val morseCodeController = MorseCodeController()
+
+    private val flashController = FlashController(this)
 
     private val recorder by lazy {
         AndroidAudioRecorder(applicationContext)
@@ -52,16 +56,21 @@ class TranslatorActivity : ComponentActivity() {
             val morseCode = morseCodeController.translateToMorse(textToTranslate)
             afterText.text = morseCode
         }
+
+
+
+        //dzwiek do morse
         val playButton: ImageButton = findViewById(R.id.soundButton) // Przykładowy przycisk w twojej aplikacji
 
         playButton.setOnClickListener {
             val sentences = afterText.text.toString().split("/").toTypedArray()
+
             // Zablokowanie przycisku
             playButton.isEnabled = false
 
             // Wywołanie funkcji playSound w tle
             GlobalScope.launch {
-                morseCodeController.playSound(sentences, 20)
+                morseCodeController.playSound(sentences, 10)
 
                 runOnUiThread {
                     playButton.isEnabled =
@@ -70,6 +79,15 @@ class TranslatorActivity : ComponentActivity() {
             }
         }
 
+        //latarka do morse
+        findViewById<ImageButton>(R.id.torchButton).setOnClickListener{
+
+            val sentences = afterText.text.toString().split("/").toTypedArray()
+
+            flashController.playFlashSignal(sentences, 10)
+        }
+
+        //mikorofon
         val microphoneButton = findViewById<ImageButton>(R.id.microphoneButton)
         var isRecording = false
 
