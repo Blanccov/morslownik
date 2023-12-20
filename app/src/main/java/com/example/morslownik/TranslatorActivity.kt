@@ -61,7 +61,7 @@ class TranslatorActivity : ComponentActivity() {
 
             // Wywołanie funkcji playSound w tle
             GlobalScope.launch {
-                morseCodeController.playSound(sentences)
+                morseCodeController.playSound(sentences, 20)
 
                 runOnUiThread {
                     playButton.isEnabled =
@@ -90,10 +90,9 @@ class TranslatorActivity : ComponentActivity() {
 
         findViewById<ImageButton>(R.id.paybackButton).setOnClickListener Button@{
             player.playFile(audioFile ?: return@Button)
-        }
-        }
 
-
+        }
     }
+}
 
 

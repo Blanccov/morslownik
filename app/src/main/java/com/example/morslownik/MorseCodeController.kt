@@ -123,7 +123,11 @@ class MorseCodeController {
 
 
     @Throws(InterruptedException::class)
-    fun playSound(morseMessage: Array<String>) {
+    fun playSound(morseMessage: Array<String>, wpm: Int) {
+        val dotDuration = (1200 / wpm).toLong()
+        val dashDuration = (3 * dotDuration).toInt()
+        val slashDuration = (7 * dotDuration).toInt()
+
         val sampleRate = 44100
         val minBufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT)
 
@@ -138,25 +142,22 @@ class MorseCodeController {
 
         audioTrack.play()
 
-        val dotDuration = 200
-        val dashDuration = (2 * dotDuration).toInt()
-        val slashDuration = 4 * dashDuration
-
         for (pattern in morseMessage) {
             for (c in pattern.toCharArray()) {
                 when (c) {
                     '.' -> {
-                        playBeep(audioTrack, dotDuration)
-                        Thread.sleep(dotDuration.toLong())
+                        playBeep(audioTrack, dotDuration.toInt())
+                        Thread.sleep(dotDuration)
                     }
                     '-' -> {
                         playBeep(audioTrack, dashDuration)
-                        Thread.sleep(dotDuration.toLong())
+                        Thread.sleep(dotDuration)
                     }
                     '/' -> Thread.sleep(slashDuration.toLong())
+                    ' ' -> Thread.sleep(dashDuration.toLong())
                 }
             }
-            Thread.sleep(dotDuration.toLong())
+            Thread.sleep(dotDuration)
         }
 
         audioTrack.stop()
@@ -170,13 +171,19 @@ class MorseCodeController {
         val twoPi = 2.0 * Math.PI
 
         val freq = 440.0
+        val fadeLength = 1000 // Długość cross-fadingu (w próbkach)
 
         for (i in 0 until numSamples) {
-            buffer[i] = (amp * Math.sin(i.toDouble() * twoPi * freq / 44100.0)).toInt().toShort()
+            val fadeValue = if (i < fadeLength) (i.toFloat() / fadeLength.toFloat()) else if (i > numSamples - fadeLength) ((numSamples - i).toFloat() / fadeLength.toFloat()) else 1.0f
+
+            val sample = (amp * fadeValue * Math.sin(i.toDouble() * twoPi * freq / 44100.0)).toInt().toShort()
+            buffer[i] = sample
         }
 
         audioTrack.write(buffer, 0, buffer.size)
     }
+
+
 
 
 }
