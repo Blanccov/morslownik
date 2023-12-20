@@ -4,6 +4,14 @@ import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 
+import android.media.AudioRecord
+import android.media.MediaRecorder
+import android.os.Environment
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
+
 
 
 class MorseCodeController {
@@ -169,5 +177,6 @@ class MorseCodeController {
 
         audioTrack.write(buffer, 0, buffer.size)
     }
+
 
 }

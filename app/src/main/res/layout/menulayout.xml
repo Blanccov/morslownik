@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/button3"
+        android:id="@+id/alarmButton"
         android:layout_width="90dp"
         android:layout_height="80dp"
         android:layout_marginBottom="428dp"
@@ -41,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/button5"
+        android:id="@+id/hisotryButton"
         android:layout_width="90dp"
         android:layout_height="80dp"
         android:layout_marginEnd="36dp"
@@ -106,9 +106,9 @@
         android:text="@string/sos_btn"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/button3"
-        app:layout_constraintStart_toStartOf="@+id/button3"
-        app:layout_constraintTop_toBottomOf="@+id/button3" />
+        app:layout_constraintEnd_toEndOf="@+id/alarmButton"
+        app:layout_constraintStart_toStartOf="@+id/alarmButton"
+        app:layout_constraintTop_toBottomOf="@+id/alarmButton" />
 
     <TextView
         android:id="@+id/textView6"
@@ -117,9 +117,9 @@
         android:text="@string/history_btn"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/button5"
-        app:layout_constraintStart_toStartOf="@+id/button5"
-        app:layout_constraintTop_toBottomOf="@+id/button5" />
+        app:layout_constraintEnd_toEndOf="@+id/hisotryButton"
+        app:layout_constraintStart_toStartOf="@+id/hisotryButton"
+        app:layout_constraintTop_toBottomOf="@+id/hisotryButton" />
 
     <TextView
         android:id="@+id/textView7"
