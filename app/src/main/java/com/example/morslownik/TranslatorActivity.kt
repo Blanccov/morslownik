@@ -18,7 +18,7 @@ import com.plcoding.audiorecorder.record.AndroidAudioRecorder
 import java.io.File
 
 class TranslatorActivity : ComponentActivity() {
-    private val morseCodeController = MorseCodeController()
+
 
     private lateinit var seekBar: SeekBar
     private lateinit var wpmView: TextView
@@ -39,6 +39,7 @@ class TranslatorActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.translatorlayout)
 
+        val morseCodeController = MorseCodeController(this)
         val flashController = FlashController(this)
 
         var captureText = CaptureActivity.textToTranslate

@@ -1,5 +1,6 @@
 package com.example.morslownik;
 
+import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
@@ -7,6 +8,7 @@ import android.media.AudioTrack
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Environment
+import android.os.Vibrator
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -14,7 +16,9 @@ import java.io.IOException
 
 
 
-class MorseCodeController {
+class MorseCodeController(private val context: Context) {
+
+    private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private val morseCodeMap: HashMap<Char, String> = HashMap()
 
     init {
@@ -153,8 +157,12 @@ class MorseCodeController {
                         playBeep(audioTrack, dashDuration)
                         Thread.sleep(dotDuration)
                     }
-                    '/' -> Thread.sleep(slashDuration.toLong())
-                    ' ' -> Thread.sleep(dashDuration.toLong())
+                    '/' -> {
+                        Thread.sleep(slashDuration.toLong())
+                    }
+                    ' ' -> {
+                        Thread.sleep(dashDuration.toLong())
+                    }
                 }
             }
             Thread.sleep(dotDuration)
@@ -162,6 +170,10 @@ class MorseCodeController {
 
         audioTrack.stop()
         audioTrack.release()
+    }
+
+    private fun playVibration(duration: Long) {
+        vibrator.vibrate(duration)
     }
 
     private fun playBeep(audioTrack: AudioTrack, duration: Int) {
@@ -173,15 +185,33 @@ class MorseCodeController {
         val freq = 440.0
         val fadeLength = 1000 // Długość cross-fadingu (w próbkach)
 
-        for (i in 0 until numSamples) {
-            val fadeValue = if (i < fadeLength) (i.toFloat() / fadeLength.toFloat()) else if (i > numSamples - fadeLength) ((numSamples - i).toFloat() / fadeLength.toFloat()) else 1.0f
+        val beepThread = Thread {
+            for (i in 0 until numSamples) {
+                val fadeValue = if (i < fadeLength) (i.toFloat() / fadeLength.toFloat()) else if (i > numSamples - fadeLength) ((numSamples - i).toFloat() / fadeLength.toFloat()) else 1.0f
 
-            val sample = (amp * fadeValue * Math.sin(i.toDouble() * twoPi * freq / 44100.0)).toInt().toShort()
-            buffer[i] = sample
+                val sample =
+                    (amp * fadeValue * Math.sin(i.toDouble() * twoPi * freq / 44100.0)).toInt().toShort()
+                buffer[i] = sample
+            }
+
+            audioTrack.write(buffer, 0, buffer.size)
         }
 
-        audioTrack.write(buffer, 0, buffer.size)
+        val vibrationThread = Thread {
+            playVibration(duration.toLong())
+        }
+
+        beepThread.start()
+        vibrationThread.start()
+
+        try {
+            beepThread.join()
+            vibrationThread.join()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
+
 
 
 }

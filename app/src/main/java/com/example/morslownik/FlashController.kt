@@ -7,7 +7,6 @@ import kotlinx.coroutines.*
 
 class FlashController(private val context: Context) {
 
-    private val handler = Handler(Looper.getMainLooper())
     private lateinit var flashSignalJob: Job
     private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
