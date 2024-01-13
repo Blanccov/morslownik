@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import android.widget.SeekBar
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.plcoding.audiorecorder.playback.AndroidAudioPlayer
 import com.plcoding.audiorecorder.record.AndroidAudioRecorder
 import java.io.File
@@ -18,12 +20,10 @@ import java.io.File
 class TranslatorActivity : ComponentActivity() {
     private val morseCodeController = MorseCodeController()
 
-    private val flashController = FlashController(this)
-
     private lateinit var seekBar: SeekBar
     private lateinit var wpmView: TextView
 
-    private var wpm = 10;
+    private var wpm = 10
 
     private val recorder by lazy {
         AndroidAudioRecorder(applicationContext)
@@ -34,9 +34,12 @@ class TranslatorActivity : ComponentActivity() {
     }
 
     private var audioFile: File? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.translatorlayout)
+
+        val flashController = FlashController(this)
 
         var captureText = CaptureActivity.textToTranslate
 
@@ -45,55 +48,53 @@ class TranslatorActivity : ComponentActivity() {
         }
 
         val previousText =
-            findViewById<EditText>(R.id.prevText) // Zmiana na EditText, aby użytkownik mógł wprowadzać tekst
+            findViewById<EditText>(R.id.prevText)
         val afterText = findViewById<TextView>(R.id.afterText)
 
         findViewById<Button>(R.id.translateButton).setOnClickListener {
-            val textToTranslate = previousText.text.toString() // Pobranie wprowadzonego tekstu
+            val textToTranslate = previousText.text.toString()
             val morseCode = morseCodeController.translateToMorse(textToTranslate)
             afterText.text = morseCode
         }
 
-
-        //dzwiek do morse
-        val playButton: ImageButton =
-            findViewById(R.id.soundButton) // Przykładowy przycisk w twojej aplikacji
+        val playButton: ImageButton = findViewById(R.id.soundButton)
 
         playButton.setOnClickListener {
             val sentences = afterText.text.toString().split("/").toTypedArray()
 
-            // Zablokowanie przycisku
+            // Zablokowanie seekbara
+            seekBar.isEnabled = false
             playButton.isEnabled = false
 
-            // Wywołanie funkcji playSound w tle
             GlobalScope.launch {
                 morseCodeController.playSound(sentences, wpm)
 
                 runOnUiThread {
-                    playButton.isEnabled =
-                        true // To jest tylko przykład, gdzie odblokowujesz przycisk
+                    // Odblokowanie seekbara
+                    seekBar.isEnabled = true
+                    playButton.isEnabled = true
                 }
             }
         }
 
         val torchButton = findViewById<ImageButton>(R.id.torchButton)
 
-        //latarka do morse
         torchButton.setOnClickListener {
-
             val sentences = afterText.text.toString().split("/").toTypedArray()
 
+            // Zablokowanie seekbara
+            seekBar.isEnabled = false
             torchButton.isEnabled = false
 
+            lifecycleScope.launch {
                 flashController.playFlashSignal(sentences, wpm)
 
-                runOnUiThread {
-                    torchButton.isEnabled =
-                        true // To jest tylko przykład, gdzie odblokowujesz przycisk
-                }
+                // Odblokowanie seekbara
+                seekBar.isEnabled = true
+                torchButton.isEnabled = true
+            }
         }
 
-        //mikorofon
         val microphoneButton = findViewById<ImageButton>(R.id.microphoneButton)
         var isRecording = false
 
@@ -112,12 +113,9 @@ class TranslatorActivity : ComponentActivity() {
             }
         }
 
-        findViewById<ImageButton>(R.id.paybackButton).setOnClickListener Button@{
-            player.playFile(audioFile ?: return@Button)
-
+        findViewById<ImageButton>(R.id.paybackButton).setOnClickListener {
+            player.playFile(audioFile ?: return@setOnClickListener)
         }
-
-        //wnp seekbar
 
         seekBar = findViewById(R.id.seekBar)
         wpmView = findViewById(R.id.wpmView)
@@ -126,22 +124,20 @@ class TranslatorActivity : ComponentActivity() {
         seekBar.min = 4
         seekBar.progress = 9
 
-        // Dodaj listener do seekbara
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val value = progress + 1
                 wpmView.text = "WPM: $value"
-                wpm = value;
+                wpm = value
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Puste, jeśli nie potrzebujesz obsługi w momencie rozpoczęcia przesuwania
+                // Puste
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Puste, jeśli nie potrzebujesz obsługi w momencie zakończenia przesuwania
+                // Puste
             }
-    })
+        })
+    }
 }
-}
-
