@@ -39,13 +39,14 @@ class TranslatorActivity : ComponentActivity() {
     }
 
     private var audioFile: File? = null
-
+    private var isRecording = false
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null){
             if (requestCode == 10){
                 val stringArrayListExtra = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 findViewById<TextView>(R.id.prevText).setText(stringArrayListExtra!![0])
+                isRecording = false
             }
         }
         else {
@@ -134,7 +135,6 @@ class TranslatorActivity : ComponentActivity() {
         }
 
         val microphoneButton = findViewById<ImageButton>(R.id.microphoneButton)
-        var isRecording = false
 
         //rozpoznawanie mowy
             microphoneButton.setOnClickListener {

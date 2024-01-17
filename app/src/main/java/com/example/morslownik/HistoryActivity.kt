@@ -22,25 +22,27 @@ class HistoryActivity : ComponentActivity() {
             val cursor = db.getHistory()
             val historyT = findViewById<TextView>(R.id.historyText)
 
-
-            // moving the cursor to first position and
-            // appending value in the text view
-            cursor!!.moveToFirst()
-            historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.PLAIN_TEXT)) + "\n")
-            historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.MORSE_CODE)) + "\n\n")
-
-            // moving our cursor to next
-            // position and appending values
-            while(cursor.moveToNext()){
+                // moving the cursor to first position and
+                // appending value in the text view
+                if(cursor!!.moveToFirst()){
                 historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.PLAIN_TEXT)) + "\n")
                 historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.MORSE_CODE)) + "\n\n")
+
+                // moving our cursor to next
+                // position and appending values
+                while (cursor.moveToNext()) {
+                    historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.PLAIN_TEXT)) + "\n")
+                    historyT.append(cursor.getString(cursor.getColumnIndexOrThrow(DBController.MORSE_CODE)) + "\n\n")
+                }
+
+                // at last we close our cursor
+                cursor.close()}
+        else{
+            historyT.setText("First time? Nothing to see here :D")
+                }
             }
 
-            historyT.scrollTo(0,0)
-
-            // at last we close our cursor
-            cursor.close()
         }
-    }
+
 
 
