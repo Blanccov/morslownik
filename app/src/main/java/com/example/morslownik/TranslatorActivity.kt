@@ -91,6 +91,7 @@ class TranslatorActivity : ComponentActivity() {
         }
 
         val playButton: ImageButton = findViewById(R.id.soundButton)
+        val torchButton = findViewById<ImageButton>(R.id.torchButton)
 
         playButton.setOnClickListener {
             val sentences = afterText.text.toString().split("/").toTypedArray()
@@ -98,6 +99,7 @@ class TranslatorActivity : ComponentActivity() {
             // Zablokowanie seekbara
             seekBar.isEnabled = false
             playButton.isEnabled = false
+            torchButton.isEnabled = false
 
             GlobalScope.launch {
                 morseCodeController.playSound(sentences, wpm)
@@ -106,11 +108,12 @@ class TranslatorActivity : ComponentActivity() {
                     // Odblokowanie seekbara
                     seekBar.isEnabled = true
                     playButton.isEnabled = true
+                    torchButton.isEnabled = true
                 }
             }
         }
 
-        val torchButton = findViewById<ImageButton>(R.id.torchButton)
+
 
         torchButton.setOnClickListener {
             val sentences = afterText.text.toString().split("/").toTypedArray()
@@ -118,6 +121,7 @@ class TranslatorActivity : ComponentActivity() {
             // Zablokowanie seekbara
             seekBar.isEnabled = false
             torchButton.isEnabled = false
+            playButton.isEnabled = false
 
             lifecycleScope.launch {
                 flashController.playFlashSignal(sentences, wpm)
@@ -125,54 +129,31 @@ class TranslatorActivity : ComponentActivity() {
                 // Odblokowanie seekbara
                 seekBar.isEnabled = true
                 torchButton.isEnabled = true
+                playButton.isEnabled = true
             }
         }
 
         val microphoneButton = findViewById<ImageButton>(R.id.microphoneButton)
         var isRecording = false
 
-//        microphoneButton.setOnClickListener {
-//            if (isRecording) {
-//                recorder.stop()
-//                isRecording = false
-//                Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show()
-//            } else {
-//                File(cacheDir, "audio.mp3").also { file ->
-//                    recorder.start(file)
-//                    audioFile = file
-//                }
-//                isRecording = true
-//                Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
         //rozpoznawanie mowy
-        microphoneButton.setOnClickListener {
-            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intent.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            )
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            startActivityForResult(intent, 10)
-
             microphoneButton.setOnClickListener {
                 if (isRecording) {
                     recorder.stop()
                     isRecording = false
                     Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show()
                 } else {
-                    File(cacheDir, "audio.mp3").also { file ->
-                        recorder.start(file)
-                        audioFile = file
-                    }
+                    val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                    intent.putExtra(
+                        RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                    )
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+                    startActivityForResult(intent, 10)
+
                     isRecording = true
                     Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
                 }
-            }}
-
-            findViewById<ImageButton>(R.id.paybackButton).setOnClickListener {
-                player.playFile(audioFile ?: return@setOnClickListener)
             }
 
             seekBar = findViewById(R.id.seekBar)
