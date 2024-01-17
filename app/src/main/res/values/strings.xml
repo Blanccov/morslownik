@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Morslownik</string>
+    <string name="app_name_mors">-- --- .-. ... .-..- --- .-- -. .. -.-</string>
+    <string name="sos_btn">Alarm</string>
+    <string name="history_btn">History</string>
+    <string name="transalte_btn">Translate</string>
+    <string name="camera_btn">Camera</string>
+    <string name="title_activity_translator">TranslatorActivity</string>
+    <string name="title_activity_capture">CaptureActivity</string>
+    <string name="translate_btn">Translate</string>
+</resources>
