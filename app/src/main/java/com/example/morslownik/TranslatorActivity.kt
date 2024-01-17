@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import android.widget.Toast
@@ -80,10 +81,11 @@ class TranslatorActivity : ComponentActivity() {
 
             db.addHistory(plain, morse)
 
-            Toast.makeText(this, "translation added to database, probably...", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "translation added to database, probably...", Toast.LENGTH_LONG)
+                .show()
         }
 
-        findViewById<Button>(R.id.clearText).setOnClickListener{
+        findViewById<Button>(R.id.clearText).setOnClickListener {
             previousText.text.clear()
             afterText.text = ""
         }
@@ -145,38 +147,55 @@ class TranslatorActivity : ComponentActivity() {
 //        }
 
         //rozpoznawanie mowy
-        microphoneButton.setOnClickListener{
+        microphoneButton.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             startActivityForResult(intent, 10)
+
+            microphoneButton.setOnClickListener {
+                if (isRecording) {
+                    recorder.stop()
+                    isRecording = false
+                    Toast.makeText(this, "Recording stopped", Toast.LENGTH_SHORT).show()
+                } else {
+                    File(cacheDir, "audio.mp3").also { file ->
+                        recorder.start(file)
+                        audioFile = file
+                    }
+                    isRecording = true
+                    Toast.makeText(this, "Recording started", Toast.LENGTH_SHORT).show()
+                }
+            }}
+
+            findViewById<ImageButton>(R.id.paybackButton).setOnClickListener {
+                player.playFile(audioFile ?: return@setOnClickListener)
+            }
+
+            seekBar = findViewById(R.id.seekBar)
+            wpmView = findViewById(R.id.wpmView)
+
+            seekBar.max = 24
+            seekBar.min = 4
+            seekBar.progress = 9
+
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    val value = progress + 1
+                    wpmView.text = "WPM: $value"
+                    wpm = value
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    // Puste
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    // Puste
+                }
+            })
         }
-
-        findViewById<ImageButton>(R.id.paybackButton).setOnClickListener {
-            player.playFile(audioFile ?: return@setOnClickListener)
-        }
-
-        seekBar = findViewById(R.id.seekBar)
-        wpmView = findViewById(R.id.wpmView)
-
-        seekBar.max = 24
-        seekBar.min = 4
-        seekBar.progress = 9
-
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val value = progress + 1
-                wpmView.text = "WPM: $value"
-                wpm = value
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Puste
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Puste
-            }
-        })
     }
-}

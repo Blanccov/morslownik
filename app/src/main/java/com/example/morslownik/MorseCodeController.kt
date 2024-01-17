@@ -129,6 +129,7 @@ class MorseCodeController(private val context: Context) {
         morseCodeMap['='] = "-...-"
         morseCodeMap['!'] = "-.-.--"
         morseCodeMap['\n'] = "||\n"
+
     }
 
     fun translateToMorse(textToTranslate: String): String {

@@ -89,18 +89,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/buttonLogin"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="25dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="#293438"
-        android:src="@drawable/avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="125dp"
@@ -109,7 +97,6 @@
         android:layout_marginTop="-20dp"
         android:layout_marginEnd="83dp"
         android:src="@drawable/morsik"
-        app:layout_constraintEnd_toStartOf="@+id/buttonLogin"
         app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toEndOf="@+id/button2"
         app:layout_constraintTop_toTopOf="parent" />

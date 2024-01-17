@@ -8,10 +8,6 @@ import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 
-
-
-
-
 class MainActivity : ComponentActivity() {
     private var mediaPlayer: MediaPlayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,10 +25,13 @@ class MainActivity : ComponentActivity() {
             startActivity(intentT)
         }
 
+
         findViewById<ImageButton>(R.id.hisotryButton).setOnClickListener {
             val intentT = Intent(applicationContext, HistoryActivity::class.java)
             startActivity(intentT)
         }
+
+
 
         findViewById<ImageButton>(R.id.cameraButton).setOnClickListener {
             val intentT = Intent(applicationContext, CaptureActivity::class.java)
@@ -44,9 +43,6 @@ class MainActivity : ComponentActivity() {
         findViewById<ImageButton>(R.id.alarmButton).setOnClickListener{
             playSound()
         }
-
-
-
 
     }
 
