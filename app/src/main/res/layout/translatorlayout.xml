@@ -52,15 +52,16 @@
         app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/prevText" />
 
-    <EditText
+    <TextView
         android:id="@+id/afterText"
         android:layout_width="353dp"
         android:layout_height="170dp"
         android:layout_marginTop="8dp"
         android:background="#CFC6BF"
         android:ems="10"
-        android:inputType="textMultiLine"
+        android:inputType="none"
         android:padding="10dp"
+        android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageButton" />
@@ -125,7 +126,7 @@
         app:layout_constraintTop_toTopOf="@+id/prevText" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/button_copy2"
         android:layout_width="27dp"
         android:layout_height="28dp"
         android:layout_marginTop="4dp"

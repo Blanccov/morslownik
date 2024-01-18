@@ -21,6 +21,10 @@ import com.plcoding.audiorecorder.playback.AndroidAudioPlayer
 import com.plcoding.audiorecorder.record.AndroidAudioRecorder
 import java.io.File
 import java.util.Locale
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.ImageView
 
 
 class TranslatorActivity : ComponentActivity() {
@@ -71,6 +75,34 @@ class TranslatorActivity : ComponentActivity() {
         val previousText =
             findViewById<EditText>(R.id.prevText)
         val afterText = findViewById<TextView>(R.id.afterText)
+
+        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        findViewById<ImageView>(R.id.button_copy).setOnClickListener{
+            val textToCopy = previousText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " ")
+            if(textToCopy.isNotEmpty()){
+            val clip = ClipData.newPlainText("Text", textToCopy)
+            clipboardManager.setPrimaryClip(clip)
+            Toast.makeText(
+                this,
+                "Text copied",
+                Toast.LENGTH_LONG
+            )
+                .show()}
+        }
+
+        findViewById<ImageView>(R.id.button_copy2).setOnClickListener{
+            val textToCopy = afterText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " ")
+            if(textToCopy.isNotEmpty()){
+                val clip = ClipData.newPlainText("Text", textToCopy)
+                clipboardManager.setPrimaryClip(clip)
+                Toast.makeText(
+                    this,
+                    "Code copied",
+                    Toast.LENGTH_LONG
+                )
+                    .show()}
+        }
 
         var dumper = ""
 
