@@ -72,24 +72,37 @@ class TranslatorActivity : ComponentActivity() {
             findViewById<EditText>(R.id.prevText)
         val afterText = findViewById<TextView>(R.id.afterText)
 
+        var dumper = ""
+
         findViewById<Button>(R.id.translateButton).setOnClickListener {
             val textToTranslate = previousText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " ")
             if(textToTranslate.isNotEmpty()) {
-                val morseCode = morseCodeController.translateToMorse(textToTranslate)
-                afterText.text = morseCode
+                if(!textToTranslate.equals(dumper)) {
+                    dumper = textToTranslate
+                    val morseCode = morseCodeController.translateToMorse(textToTranslate)
+                    afterText.text = morseCode
 
-                val db = DBController(this, null)
-                val plain = textToTranslate
-                val morse = morseCode
+                    val db = DBController(this, null)
+                    val plain = textToTranslate
+                    val morse = morseCode
 
-                db.addHistory(plain, morse)
+                    db.addHistory(plain, morse)
 
-                Toast.makeText(
-                    this,
-                    "translation added to database, probably...",
-                    Toast.LENGTH_LONG
-                )
-                    .show()
+                    Toast.makeText(
+                        this,
+                        "translation added to database, probably...",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+                else{
+                    Toast.makeText(
+                        this,
+                        "Already translated",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
             }
             else{
                 Toast.makeText(
