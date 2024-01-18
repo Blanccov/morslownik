@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
+import android.text.TextUtils.replace
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
@@ -72,18 +73,32 @@ class TranslatorActivity : ComponentActivity() {
         val afterText = findViewById<TextView>(R.id.afterText)
 
         findViewById<Button>(R.id.translateButton).setOnClickListener {
-            val textToTranslate = previousText.text.toString()
-            val morseCode = morseCodeController.translateToMorse(textToTranslate)
-            afterText.text = morseCode
+            val textToTranslate = previousText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " ")
+            if(textToTranslate.isNotEmpty()) {
+                val morseCode = morseCodeController.translateToMorse(textToTranslate)
+                afterText.text = morseCode
 
-            val db = DBController(this, null)
-            val plain = previousText.text.toString()
-            val morse = afterText.text.toString()
+                val db = DBController(this, null)
+                val plain = textToTranslate
+                val morse = morseCode
 
-            db.addHistory(plain, morse)
+                db.addHistory(plain, morse)
 
-            Toast.makeText(this, "translation added to database, probably...", Toast.LENGTH_LONG)
-                .show()
+                Toast.makeText(
+                    this,
+                    "translation added to database, probably...",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+            else{
+                Toast.makeText(
+                    this,
+                    "Cannot translate empty text",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
         }
 
         findViewById<Button>(R.id.clearText).setOnClickListener {
