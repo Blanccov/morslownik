@@ -139,6 +139,18 @@ class MorseCodeController(private val context: Context) {
         }
         return translatedText.toString()
     }
+    fun translateToText(morseCode: String): String {
+        val textBuilder = StringBuilder()
+        val morseCodeArray = morseCode.split(" ")
+        morseCodeArray.forEach { morseSymbol ->
+            val letter = morseCodeMap.entries.find { it.value == morseSymbol }?.key
+            if (letter != null) {
+                textBuilder.append(letter)
+            }
+        }
+        return textBuilder.toString()
+    }
+
 
 
 

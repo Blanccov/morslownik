@@ -49,7 +49,7 @@
         android:src="@drawable/micro"
         app:layout_constraintBottom_toTopOf="@+id/afterText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
+        app:layout_constraintStart_toEndOf="@+id/switchButton"
         app:layout_constraintTop_toBottomOf="@+id/prevText" />
 
     <TextView
@@ -64,7 +64,7 @@
         android:textIsSelectable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton" />
+        app:layout_constraintTop_toBottomOf="@+id/switchButton" />
 
     <ImageButton
         android:id="@+id/button2"
@@ -99,13 +99,13 @@
         android:ems="10"
         android:inputType="textMultiLine"
         android:padding="10dp"
-        android:hint="Ala has a cat..."
+        android:hint="Hello"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/switchButton"
         android:layout_width="53dp"
         android:layout_height="47dp"
         android:layout_marginTop="8dp"

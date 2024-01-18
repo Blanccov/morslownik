@@ -53,18 +53,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
-        android:id="@+id/button2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="19dp"
-        android:background="@drawable/roundstyle"
-        android:backgroundTint="#CFC6BF"
-        android:src="@drawable/back_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
         android:id="@+id/translator_btn"
         android:layout_width="194dp"
         android:layout_height="132dp"

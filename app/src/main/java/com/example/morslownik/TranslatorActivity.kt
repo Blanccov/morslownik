@@ -105,46 +105,53 @@ class TranslatorActivity : ComponentActivity() {
         }
 
         var dumper = ""
+        var isTextToMorseMode = true
 
         findViewById<Button>(R.id.translateButton).setOnClickListener {
             val textToTranslate = previousText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " ")
-            if(textToTranslate.isNotEmpty()) {
-                if(!textToTranslate.equals(dumper)) {
+            if (textToTranslate.isNotEmpty()) {
+                if (!textToTranslate.equals(dumper)) {
                     dumper = textToTranslate
-                    val morseCode = morseCodeController.translateToMorse(textToTranslate)
-                    afterText.text = morseCode
+                    val translatedText = if (isTextToMorseMode) {
+                        morseCodeController.translateToMorse(textToTranslate)
+                    } else {
+                        morseCodeController.translateToText(textToTranslate)
+                    }
+                    afterText.text = translatedText
 
                     val db = DBController(this, null)
                     val plain = textToTranslate
-                    val morse = morseCode
+                    val morse = translatedText
 
                     db.addHistory(plain, morse)
 
                     Toast.makeText(
                         this,
-                        "translation added to database, probably...",
+                        "Translation added to database, probably...",
                         Toast.LENGTH_LONG
-                    )
-                        .show()
-                }
-                else{
+                    ).show()
+                } else {
                     Toast.makeText(
                         this,
                         "Already translated",
                         Toast.LENGTH_LONG
-                    )
-                        .show()
+                    ).show()
                 }
-            }
-            else{
+            } else {
                 Toast.makeText(
                     this,
                     "Cannot translate empty text",
                     Toast.LENGTH_LONG
-                )
-                    .show()
+                ).show()
             }
         }
+
+        findViewById<ImageButton>(R.id.switchButton).setOnClickListener {
+            isTextToMorseMode = !isTextToMorseMode
+            val switchButtonText = if (isTextToMorseMode) "Hello" else ".... . .-.. .-.. ---"
+            findViewById<EditText>(R.id.prevText).hint = switchButtonText
+        }
+
 
         findViewById<Button>(R.id.clearText).setOnClickListener {
             previousText.text.clear()
