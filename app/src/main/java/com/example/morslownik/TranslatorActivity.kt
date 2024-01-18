@@ -2,34 +2,37 @@ package com.example.morslownik
 
 import FlashController
 import android.app.Activity
-import android.content.Intent
-import android.os.Bundle
-import android.speech.RecognizerIntent
-import android.text.TextUtils.replace
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.TextView
-import androidx.activity.ComponentActivity
-import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
-import com.plcoding.audiorecorder.playback.AndroidAudioPlayer
-import com.plcoding.audiorecorder.record.AndroidAudioRecorder
-import java.io.File
-import java.util.Locale
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
+import android.os.Bundle
+import android.provider.ContactsContract
+import android.speech.RecognizerIntent
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.SeekBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.lifecycle.lifecycleScope
+import com.plcoding.audiorecorder.playback.AndroidAudioPlayer
+import com.plcoding.audiorecorder.record.AndroidAudioRecorder
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.File
+import java.util.Locale
 
 
 class TranslatorActivity : ComponentActivity() {
 
-
+    companion object {
+        private const val PICK_CONTACT_REQUEST = 1
+    }
     private lateinit var seekBar: SeekBar
     private lateinit var wpmView: TextView
 
@@ -56,6 +59,26 @@ class TranslatorActivity : ComponentActivity() {
         }
         else {
             Toast.makeText(applicationContext, "Failed to recognize speech!", Toast.LENGTH_LONG).show()
+        }
+        if (requestCode == PICK_CONTACT_REQUEST && resultCode == Activity.RESULT_OK) {
+            val contactUri: Uri? = data?.data
+            val cursor: Cursor? = contactUri?.let {
+                contentResolver.query(it, null, null, null, null)
+            }
+
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val phoneNumberIndex: Int =
+                        it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                    val phoneNumber: String = it.getString(phoneNumberIndex)
+                    val afterText = findViewById<TextView>(R.id.afterText)
+                    val sendIntent = Intent(Intent.ACTION_VIEW)
+                    sendIntent.putExtra("address", phoneNumber)
+                    sendIntent.putExtra("sms_body", afterText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " "))
+                    sendIntent.type = "vnd.android-dir/mms-sms"
+                    startActivity(sendIntent)
+                }
+            }
         }
     }
 
@@ -181,6 +204,12 @@ class TranslatorActivity : ComponentActivity() {
             }
         }
 
+
+        findViewById<Button>(R.id.smsButton).setOnClickListener {
+            val sendIntent = Intent(Intent.ACTION_PICK)
+            sendIntent.type = ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+            startActivityForResult(sendIntent, PICK_CONTACT_REQUEST)
+        }
 
 
         torchButton.setOnClickListener {
