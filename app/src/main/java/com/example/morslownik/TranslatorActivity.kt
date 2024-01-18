@@ -6,10 +6,12 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ResolveInfo
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.Telephony
 import android.speech.RecognizerIntent
 import android.widget.Button
 import android.widget.EditText
@@ -72,14 +74,39 @@ class TranslatorActivity : ComponentActivity() {
                         it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
                     val phoneNumber: String = it.getString(phoneNumberIndex)
                     val afterText = findViewById<TextView>(R.id.afterText)
-                    val sendIntent = Intent(Intent.ACTION_VIEW)
-                    sendIntent.putExtra("address", phoneNumber)
-                    sendIntent.putExtra("sms_body", afterText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " "))
-                    sendIntent.type = "vnd.android-dir/mms-sms"
-                    startActivity(sendIntent)
+
+                    // Sprawdź, czy istnieje aplikacja do obsługi wiadomości SMS/MMS
+                    if (isSmsMmsIntentHandled()) {
+                        val sendIntent = Intent(Intent.ACTION_VIEW)
+                        sendIntent.putExtra("address", phoneNumber)
+                        sendIntent.putExtra("sms_body", afterText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " "))
+                        sendIntent.type = "vnd.android-dir/mms-sms"
+                        startActivity(sendIntent)
+                    } else {
+                        // Jeśli nie ma wbudowanej aplikacji, sprawdź domyślną aplikację
+                        val defaultSmsApp = Telephony.Sms.getDefaultSmsPackage(this)
+                        if (defaultSmsApp != null) {
+                            val sendIntent = Intent(Intent.ACTION_SENDTO)
+                            sendIntent.data = Uri.parse("smsto:$phoneNumber")
+                            sendIntent.putExtra("sms_body", afterText.text.toString().trim().replace(Regex("\\n+"), "\n").replace(Regex(" +"), " "))
+                            startActivity(sendIntent)
+                        } else {
+                            // Obsługa, gdy nie ma ani wbudowanej, ani domyślnej aplikacji do obsługi wiadomości SMS/MMS
+                            // Możesz wyświetlić komunikat lub podjąć inne działania
+                            // w zależności od wymagań Twojej aplikacji
+                            Toast.makeText(this, "Brak aplikacji do obsługi wiadomości SMS/MMS", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private fun isSmsMmsIntentHandled(): Boolean {
+        val sendIntent = Intent(Intent.ACTION_VIEW)
+        sendIntent.type = "vnd.android-dir/mms-sms"
+        val activities: List<ResolveInfo> = packageManager.queryIntentActivities(sendIntent, 0)
+        return activities.isNotEmpty()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
