@@ -12,8 +12,13 @@ class HistoryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.history)
 
+        //back button
 
-            val db = DBController(this, null)
+        findViewById<ImageButton>(R.id.backButton2).setOnClickListener {
+            onBackPressed()
+        }
+
+        val db = DBController(this, null)
 
             // below is the variable for cursor
             // we have called method to get

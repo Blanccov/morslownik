@@ -279,10 +279,18 @@ class TranslatorActivity : ComponentActivity() {
                 }
             }
 
+        //back button
+
+        findViewById<ImageButton>(R.id.backButton).setOnClickListener {
+            onBackPressed()
+        }
+
+        //seek bar
+
             seekBar = findViewById(R.id.seekBar)
             wpmView = findViewById(R.id.wpmView)
 
-            seekBar.max = 24
+            seekBar.max = 14
             seekBar.min = 4
             seekBar.progress = 9
 

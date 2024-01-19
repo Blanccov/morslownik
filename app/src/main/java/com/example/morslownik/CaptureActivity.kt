@@ -27,7 +27,12 @@ class CaptureActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.capturelayout)
 
-        clear = findViewById(R.id.clearButton)
+        //back button
+
+        findViewById<ImageButton>(R.id.backButton3).setOnClickListener {
+            onBackPressed()
+        }
+
         getImage = findViewById(R.id.getImageButton)
         next = findViewById(R.id.nextButton)
         recgText = findViewById(R.id.recgText)
