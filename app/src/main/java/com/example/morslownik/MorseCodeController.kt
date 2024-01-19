@@ -9,6 +9,7 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Environment
 import android.os.Vibrator
+import android.widget.Toast
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -146,10 +147,12 @@ class MorseCodeController(private val context: Context) {
         val morseCodeArray = morseCode.split(" ")
         morseCodeArray.forEach { morseSymbol ->
             val letter = morseCodeMap.entries.find { it.value == morseSymbol }?.key
+            if (letter == null) {
+                return "*Error404*"
+            }
             if (letter != null) {
                 textBuilder.append(letter)
             }
-
         }
         return textBuilder.toString()
     }

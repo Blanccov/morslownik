@@ -29,6 +29,17 @@ class DBController(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
+    fun clearHistory() {
+        // Pobierz bazę danych w trybie zapisu
+        val db = writableDatabase
+
+        // Usuń wszystkie dane z tabeli
+        db.delete(TABLE_NAME, null, null)
+
+        // Zamknij bazę danych
+        db.close()
+    }
+
     // This method is for adding data in our database
     fun addHistory(plain : String, morse : String ){
 
