@@ -135,7 +135,9 @@ class MorseCodeController(private val context: Context) {
     fun translateToMorse(textToTranslate: String): String {
         val translatedText = StringBuilder()
         textToTranslate.toCharArray().forEach { letter ->
-            translatedText.append("${morseCodeMap[letter]} ")
+            morseCodeMap[letter]?.let {
+                translatedText.append("$it ")
+            }
         }
         return translatedText.toString()
     }
@@ -147,6 +149,7 @@ class MorseCodeController(private val context: Context) {
             if (letter != null) {
                 textBuilder.append(letter)
             }
+
         }
         return textBuilder.toString()
     }

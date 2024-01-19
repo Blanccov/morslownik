@@ -175,11 +175,11 @@ class TranslatorActivity : ComponentActivity() {
 
                     db.addHistory(plain, morse)
 
-                    Toast.makeText(
-                        this,
-                        "Translation added to database, probably...",
-                        Toast.LENGTH_LONG
-                    ).show()
+//                    Toast.makeText(
+//                        this,
+//                        "Translation added to database, probably...",
+//                        Toast.LENGTH_LONG
+//                    ).show()
                 } else {
                     Toast.makeText(
                         this,
@@ -196,9 +196,17 @@ class TranslatorActivity : ComponentActivity() {
             }
         }
 
+        val prev = findViewById<EditText>(R.id.prevText)
+        val after = findViewById<TextView>(R.id.afterText)
+        var temp = ""
+
         findViewById<ImageButton>(R.id.switchButton).setOnClickListener {
             isTextToMorseMode = !isTextToMorseMode
             val switchButtonText = if (isTextToMorseMode) "Hello" else ".... . .-.. .-.. ---"
+                temp = prev.text.toString()
+                prev.setText(after.text)
+                after.setText(temp)
+
             findViewById<EditText>(R.id.prevText).hint = switchButtonText
         }
 
