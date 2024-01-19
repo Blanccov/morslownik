@@ -2,19 +2,16 @@ import android.content.Context
 import android.hardware.camera2.CameraManager
 import android.os.Handler
 import android.os.Looper
-import android.os.Vibrator
 import kotlinx.coroutines.*
 
 class FlashController(private val context: Context) {
 
     private lateinit var flashSignalJob: Job
-    private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
     private var isFlashing = false // Track if the flashlight is currently flashing
 
     @Throws(InterruptedException::class)
     suspend fun playFlashSignal(morseMessage: Array<String>, wpm: Int) {
-        val dotDuration = (1200 / wpm).toLong()
+        val dotDuration = (700 / wpm).toLong()
         val dashDuration = (3 * dotDuration).toInt()
         val slashDuration = (7 * dotDuration).toInt()
 
@@ -57,7 +54,6 @@ class FlashController(private val context: Context) {
         withContext(Dispatchers.Main) {
             isFlashing = true
             cameraManager.setTorchMode(cameraId, true)
-            vibrator.vibrate(duration)
             delay(duration)
             stopFlash(cameraManager, cameraId)
         }
