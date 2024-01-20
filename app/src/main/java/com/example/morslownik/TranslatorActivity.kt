@@ -167,6 +167,11 @@ class TranslatorActivity : ComponentActivity() {
                     } else {
                         morseCodeController.translateToText(textToTranslate)
                     }
+                    if (translatedText == "*Error404*") {
+                        // Zwrócono błąd, ustaw wartość dla 'afterText' i zakończ funkcję
+                        afterText.hint = "Wykryto nieprawidłowe znaki"
+                        return@setOnClickListener
+                    }
                     afterText.text = translatedText
 
                     val db = DBController(this, null)
