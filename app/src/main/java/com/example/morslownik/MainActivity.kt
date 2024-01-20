@@ -31,6 +31,11 @@ class MainActivity : ComponentActivity() {
             startActivity(intentT)
         }
 
+        findViewById<ImageButton>(R.id.DictionaryButton).setOnClickListener {
+                    val intentT = Intent(applicationContext, DictionaryActivity::class.java)
+                    startActivity(intentT)
+        }
+
 
 
         findViewById<ImageButton>(R.id.cameraButton).setOnClickListener {

@@ -20,7 +20,7 @@ import java.io.IOException
 class MorseCodeController(private val context: Context) {
 
     private val vibrator: Vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-    private val morseCodeMap: HashMap<Char, String> = HashMap()
+    val morseCodeMap: LinkedHashMap<Char, String> = LinkedHashMap()
 
     init {
         morseCodeMap['A'] = ".-"
