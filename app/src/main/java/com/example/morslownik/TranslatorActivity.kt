@@ -167,7 +167,7 @@ class TranslatorActivity : ComponentActivity() {
                     } else {
                         morseCodeController.translateToText(textToTranslate)
                     }
-                    if (translatedText == "*Error404*") {
+                    if (translatedText == "   ") {
                         // Zwrócono błąd, ustaw wartość dla 'afterText' i zakończ funkcję
                         afterText.hint = "Wykryto nieprawidłowe znaki"
                         return@setOnClickListener

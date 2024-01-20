@@ -148,7 +148,7 @@ class MorseCodeController(private val context: Context) {
         morseCodeArray.forEach { morseSymbol ->
             val letter = morseCodeMap.entries.find { it.value == morseSymbol }?.key
             if (letter == null) {
-                return "*Error404*"
+                return "   "
             }
             if (letter != null) {
                 textBuilder.append(letter)
