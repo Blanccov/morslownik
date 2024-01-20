@@ -45,13 +45,16 @@
         android:id="@+id/microphoneButton"
         android:layout_width="42dp"
         android:layout_height="43dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/roundstyle"
         android:backgroundTint="#384146"
         android:src="@drawable/micro"
-        app:layout_constraintBottom_toTopOf="@+id/afterText"
+        app:layout_constraintBottom_toTopOf="@+id/prevText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/switchButton"
-        app:layout_constraintTop_toBottomOf="@+id/prevText" />
+        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/afterText"
@@ -180,20 +183,22 @@
         android:id="@+id/clearText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="540dp"
-        android:layout_marginEnd="300dp"
+        android:layout_marginTop="10dp"
         android:text="Clear"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/afterText" />
 
     <Button
         android:id="@+id/smsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="42dp"
-        android:layout_marginTop="302dp"
+        android:layout_marginTop="10dp"
         android:text="SMS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.96"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/afterText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
